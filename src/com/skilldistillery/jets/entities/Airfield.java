@@ -9,13 +9,13 @@ import java.util.List;
 
 public class Airfield {
 	
-	private List<Jet> jets;
+	private ArrayList<Jet> jets;
 
-	public List<Jet> getJets() {
+	public ArrayList<Jet> getJets() {
 		return jets;
 	}
 
-	public void setJets(List<Jet> jets) {
+	public void setJets(ArrayList<Jet> jets) {
 		this.jets = jets;
 	}
 

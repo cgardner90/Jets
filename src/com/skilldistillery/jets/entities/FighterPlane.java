@@ -2,13 +2,13 @@ package com.skilldistillery.jets.entities;
 
 public class FighterPlane extends Jet implements Fighter {
 
-	public String type = "";
-	public String model = "";
-	public int speedInMph = 0;
-	public int gallonsOfFuel = 0;
-	public int range = 0;
-	public double price = 0;
-	public int numberOfGuns=0;
+	private String type = "";
+	private String model = "";
+	private int speedInMph = 0;
+	private int gallonsOfFuel = 0;
+	private int range = 0;
+	private double price = 0;
+	private int numberOfGuns=0;
 
 
 	public FighterPlane(String type, String model, int speed, int gallons, int range, double price, int numGuns) {
@@ -22,24 +22,31 @@ public class FighterPlane extends Jet implements Fighter {
 		this.numberOfGuns = numGuns;
 		
 	}
-
+	
 	
 	public FighterPlane() {
 	}
 
 	@Override
 	public void fight() {
+	System.out.println("The "+this.model+" is equipped with an armament of "+ this.numberOfGuns+" guns");
 		
 	}
 
 	@Override
 	public void fly() {
+			
+		int flightTime = (range / speedInMph);
+		if(flightTime==0) {
+			flightTime = 1;
+		}
 		System.out.println("Model:  == "+this.model+" == has the following specifications: ");
 		System.out.println(" -Type: Fighter");
 		System.out.println(" -Speed: " +this.speedInMph);
 		System.out.println(" -Fuel Capacity: " +this.gallonsOfFuel);
 		System.out.println(" -Range: " +this.gallonsOfFuel);
 		System.out.println(" -# of Guns: "+ this.numberOfGuns);
+		System.out.println("The "+ this.model+" can stay aloft for approximately\n"+ flightTime + " hour(s)");
 	}
 
 	@Override

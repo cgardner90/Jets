@@ -2,13 +2,13 @@ package com.skilldistillery.jets.entities;
 
 public class CargoPlane extends Jet implements Cargo {
 
-	public String type = "";
-	public String model = "";
-	public int speedInMph = 0;
-	public int gallonsOfFuel = 0;
-	public int range = 0;
-	public double price = 0;
-	public int carryCapacity = 0;
+	private String type = "";
+	private String model = "";
+	private int speedInMph = 0;
+	private int gallonsOfFuel = 0;
+	private int range = 0;
+	private double price = 0;
+	private int payload = 0;
 
 	public CargoPlane(String type, String model, int speed, int gallons, int range, double price, int carry) {
 		this.type = type;
@@ -17,7 +17,7 @@ public class CargoPlane extends Jet implements Cargo {
 		this.gallonsOfFuel = gallons;
 		this.range = range;
 		this.price = price;
-		this.carryCapacity = carry;
+		this.payload = carry;
 	}
 	public CargoPlane() {
 		
@@ -59,20 +59,23 @@ public class CargoPlane extends Jet implements Cargo {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public int getCarryCapacity() {
-		return carryCapacity;
+	public int getPayload() {
+		return payload;
 	}
-	public void setCarryCapacity(int carryCapacity) {
-		this.carryCapacity = carryCapacity;
+	public void setPayload(int payload) {
+		this.payload = payload;
 	}
 	@Override
 	public void fly() {
+		int flightTime = (range/speedInMph);
 		System.out.println("Model: == "+this.model+ " ==  has the following specifications: ");
 		System.out.println(" -Type: Cargo");
 		System.out.println(" -Speed: " +this.speedInMph);
 		System.out.println(" -Fuel Capacity: " +this.gallonsOfFuel);
 		System.out.println(" -Range: " +this.gallonsOfFuel);
-		System.out.println(" -Carry Capacity: "+ this.carryCapacity);
+		System.out.println(" -Payload : "+ this.payload);
+		System.out.println("The "+ this.model+" can stay aloft for approximately\n"+ flightTime + " hour(s)");
+
 	}
 
 	@Override
@@ -90,7 +93,6 @@ public class CargoPlane extends Jet implements Cargo {
 	@Override
 	public String toString() {
 		return "CargoPlane [type=" + type + ", model=" + model + ", speedInMph=" + speedInMph + ", gallonsOfFuel="
-				+ gallonsOfFuel + ", range=" + range + ", price=" + price + ", carryCapacity=" + carryCapacity + "]";
-	}
+				+ gallonsOfFuel + ", range=" + range + ", price=" + price + ", payload=" + payload;}
 
 }

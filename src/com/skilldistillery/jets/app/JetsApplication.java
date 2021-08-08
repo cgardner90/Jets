@@ -17,9 +17,10 @@ public class JetsApplication {
 		JetsApplication me = new JetsApplication();
 		Airfield af = new Airfield();
 		String filename = "Jets.txt";
-		ArrayList<Jet> jets = (ArrayList<Jet>) me.importJets(filename);
-//		me.printMenu();
-		me.makeChoice(jets);
+		af.setJets(me.importJets(filename));
+		me.printHeader();
+		af.setJets(me.makeChoice(af.getJets()));
+		
 	}
 
 	public ArrayList<Jet> importJets(String fileName) {
@@ -57,8 +58,8 @@ public class JetsApplication {
 					System.err.println("Plane #" + counter
 							+ " :of Incorrect type, jet not added.\nCheck input file for correct parameters.");
 				}
-				// Work out parsing logic
 			}
+			br.close();
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found");
 			e.getMessage();
@@ -69,7 +70,7 @@ public class JetsApplication {
 		return imported;
 	}
 
-	public void printMenu() {
+	public void printHeader() {
 		System.out.println("\n****************************************");
 		System.out.println("****************************************");
 		System.out.println("*** Welcome to our Jets Application !***");
@@ -78,6 +79,12 @@ public class JetsApplication {
 		System.out.println("***                                  ***");
 		System.out.println("****************************************");
 		System.out.println("****************************************\n\n");
+	}
+
+	public void printMenu() {
+		System.out.println("\n\n");
+		System.out.println("**********  OPTIONS MENU  **********");
+		System.out.println("************************************\n");
 		System.out.println("	1. List Fleet					");
 		System.out.println("	2. Fly All Jets					");
 		System.out.println("	3. View Fastest Jet				");
@@ -90,46 +97,50 @@ public class JetsApplication {
 		System.out.println("\n\n");
 	}
 
-	public void makeChoice(ArrayList<Jet> jets) {
+	public ArrayList<Jet> makeChoice(ArrayList<Jet> jets) {
 		boolean done = false;
+		Scanner choices = new Scanner(System.in);
 		do {
-		printMenu();
-		Scanner input = new Scanner(System.in);
-		System.out.println("Enter Choice: ");
-		int num = input.nextInt();
-		switch (num) {
-		case 1:
-			listFleet(jets);
-			break;
-		case 2:
-			flyJets(jets);
-			break;
-		case 3:
-			fastestJet(jets);
-			break;
-		case 4:
-			longestRange(jets);
-			break;
-		case 5:
-			loadCargo(jets);
-			break;
-		case 6:
-			break;
-		case 7:
-			System.out.println(jets.size());
-			jets.add(newJet());
-			System.out.println(jets.size());
-			break;
-		case 8:
-			break;
-		case 9:
-			done = true;
-			break;
-		default:
-			System.out.println("Wrong");
+			printMenu();
+			System.out.println("Enter Choice: ");
+			int num = choices.nextInt();
+			switch (num) {
+			case 1:
+				listFleet(jets);
+				break;
+			case 2:
+				flyJets(jets);
+				break;
+			case 3:
+				fastestJet(jets);
+				break;
+			case 4:
+				longestRange(jets);
+				break;
+			case 5:
+				loadCargo(jets);
+				break;
+			case 6:
+				fightJets(jets);
+				break;
+			case 7:
+				jets.add(newJet());
+				break;
+			case 8:
+				removeJet(jets);
+				break;
+			case 9:
+				done = true;
+				break;
+			default:
+				System.out.println("Wrong entry, try again.");
+				break;
+			}
+		} while (!done);
+		if(done) {
+			choices.close();
 		}
-		}
-while(!done);
+		return jets;
 	}
 
 	public void listFleet(ArrayList<Jet> jets) {
@@ -146,6 +157,19 @@ while(!done);
 		}
 	}
 
+		public void fightJets(ArrayList<Jet> jets) {
+		for (Jet j : jets) {
+			if(j.getType().equals("Fighter")){
+				FighterPlane fp = ((FighterPlane) j);
+				fp.fight();
+			}
+		}
+			
+			
+		}
+		
+		
+		
 	public void fastestJet(ArrayList<Jet> jets) {
 		int topSpeed = 0;
 		String s = "";
@@ -171,46 +195,63 @@ while(!done);
 		System.out.println("The plane with the longest range is : ");
 		System.out.println(s);
 	}
+
 	public void loadCargo(ArrayList<Jet> jets) {
 		for (Jet j : jets) {
-			if(j.getType().equals("Cargo")) {
-			CargoPlane cp = (CargoPlane) j;
-			System.out.print(cp.loadCargo());
-			System.out.println("\n");
-		}
-	}
-		
-	}
-		public Jet newJet() {
-			ArrayList<Jet> newJets = new ArrayList<>();
-			Scanner input = new Scanner(System.in);
-			System.out.println("Enter a new Jet here: \n");
-			System.out.println("New Jet type: (Cargo or Fighter)");
-			String type = input.nextLine();
-			System.out.println("New Jet model: ");
-			String model = input.nextLine();
-			System.out.println("New Jet speed(MPH): \nNote: Must be an integer.");
-			int speed = input.nextInt();
-			System.out.println("New Jet Fuel Cap. (Gallons): ");
-			int fuel = input.nextInt();
-			System.out.println("New Jet Range: ");
-			int range = input.nextInt();
-			System.out.println("New Jet Price: ");
-			double price = input.nextDouble();
-			System.out.println("If New Jet is Cargo, enter Carry Capacity: \nIf a Fighter, Enter Number of Guns:");
-			int option = input.nextInt();
-			if (type.equals("Cargo")) {
-				Jet j = new CargoPlane(type, model, speed, fuel, range, price, option);
-				System.out.println(j);
-				return j;
-			} else if (type.equals("Fighter")) {
-				Jet j = new FighterPlane(type, model, speed, fuel, range, price, option);
-				System.out.println(j);
-				return j;
-			}else {
-				return null;
+			if (j.getType().equals("Cargo")) {
+				CargoPlane cp = (CargoPlane) j;
+				System.out.print(cp.loadCargo());
+				System.out.println("\n");
 			}
+		}
+
+	}
+
+	public ArrayList<Jet> removeJet(ArrayList<Jet> jets) {
+		Scanner input = new Scanner(System.in);
+		System.out.println("To remove a plane, follow instructions below.\n");	
+		System.out.println("Enter the number of the Jet that you wish to remove.\n");
+			for(int i = 0 ; i < jets.size() ; i++) {
+				
+				System.out.println("Plane: "+i+" is " +jets.get(i));
+			}
+		int response = input.nextInt();
+		System.out.println(jets.size());
+		
+		jets.remove(response);
+		System.out.println(jets.size());
+		return jets;
+	}
+
+	public Jet newJet() {
+		Scanner input = new Scanner(System.in);
+		System.out.println("Enter a new Jet here: \n");
+		System.out.println("New Jet type: (Cargo or Fighter)");
+		String type = input.nextLine();
+		System.out.println("New Jet model: ");
+		String model = input.nextLine();
+		System.out.println("New Jet speed(MPH): \nNote: Must be an integer.");
+		int speed = input.nextInt();
+		System.out.println("New Jet Fuel Cap. (Gallons): ");
+		int fuel = input.nextInt();
+		System.out.println("New Jet Range: ");
+		int range = input.nextInt();
+		System.out.println("New Jet Price: ");
+		double price = input.nextDouble();
+		System.out.println("If New Jet is TYPE: Cargo, enter Payload(in pounds) : \nIf TYPE: Fighter, Enter Number of Guns:");
+		int option = input.nextInt();
+		if (type.equalsIgnoreCase("Cargo")) {
+			Jet j = new CargoPlane(type, model, speed, fuel, range, price, option);
+			System.out.println(j);
+			return j;
+		} else if (type.equalsIgnoreCase("Fighter")) {
+			Jet j = new FighterPlane(type, model, speed, fuel, range, price, option);
+			System.out.println(j);
+			return j;
+		} else {
 			
-			
-}
+			return null;
+		}
+
+	}
 }
